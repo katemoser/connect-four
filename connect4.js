@@ -120,9 +120,15 @@ function handleClick(evt) {
   currPlayer = currPlayer === 1 ? 2 : 1;
 }
 
+/**takes coordinates, returns true if legal move, false if not */
+function checkIfLegal(y, x){
+  return((y >=0 && y < HEIGHT) && (x >= 0 && x < WIDTH))
+}
+
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
 function checkForWin() {
+  console.log("CheckForWin");
 
   /** _win:
    * takes input array of 4 cell coordinates [ [y, x], [y, x], [y, x], [y, x] ]
@@ -130,11 +136,21 @@ function checkForWin() {
    * currPlayer
    */
   function _win(cells) {
+    console.log("checking 4 cells with _win")
 
     // TODO: Check four cells to see if they're all legal & all color of current
     // player
 
+    for(let cell of cells){
+      if(!checkIfLegal(cell[0], cell[1])){
+        return false;
+      }
+    }
+    console.log("All cells are legal");
+    return cells.every(cell => board[cell[0]][cell[1]] === currPlayer);
+
   }
+
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
   // for 4 cells (starting here) for each of the different
@@ -147,9 +163,9 @@ function checkForWin() {
       // [ [y, x], [y, x], [y, x], [y, x] ]
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert;
-      let diagDL;
-      let diagDR;
+      let vert = [ [y, x], [y + 1, x], [y + 2, x], [y + 3, x] ];
+      let diagDL = [[y, x], [y +1, x - 1], [y + 2, x - 2], [y + 3, x -3]];
+      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y +3, x + 3]];
 
       // find winner (only checking each win-possibility as needed)
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
