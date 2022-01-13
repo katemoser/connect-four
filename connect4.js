@@ -86,7 +86,8 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  alert(msg);
+  console.log('game over!');
+  setTimeout(() => alert(msg), 0);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -107,7 +108,7 @@ function handleClick(evt) {
 
   // check for win
   if (checkForWin()) {
-    return endGame(`Player ${currPlayer} won!`);
+    endGame(`Player ${currPlayer} won!`);
   }
 
   // check for tie
@@ -137,13 +138,13 @@ function checkForWin() {
   function _win(cells) {
     console.log("checking 4 cells with _win")
 
-    for (let cell of cells) {
-      if (!checkIfLegal(cell[0], cell[1])) {
+    for (let [y, x] of cells) {
+      if (!checkIfLegal(y, x)) {
         return false;
       }
     }
     console.log("All cells are legal");
-    return cells.every(cell => board[cell[0]][cell[1]] === currPlayer);
+    return cells.every(([y, x]) => board[y][x] === currPlayer);
 
   }
 
